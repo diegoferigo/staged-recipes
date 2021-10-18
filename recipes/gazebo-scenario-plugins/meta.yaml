@@ -1,0 +1,82 @@
+{% set name = "gazebo-scenario-plugins" %}
+{% set version = "0.2.1" %}
+
+package:
+  name: {{ name + "_split" | lower }}
+  version: {{ version }}
+
+source:
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/gazebo_scenario_plugins-{{ version }}.tar.gz
+  sha256: 70a33bf0a9f45341de9c8f450474130276bf2c91b55af7af68f91a6e4007471b
+
+build:
+  number: 0
+  skip: true  # [py<38 or (not linux)]
+
+outputs:
+
+  - name: libgazebo-scenario-plugins
+    script: build_libgazebo-scenario-plugins.sh  # [unix]
+    build:
+      run_exports:
+        - {{ pin_subpackage("libgazebo-scenario-plugins", max_pin="x.x") }}
+    requirements:
+      build:
+        - cmake
+        - ninja
+        - pkg-config
+        - {{ compiler("c") }}
+        - {{ compiler("cxx") }}
+        # Not sure why the following is necessary (prevents cstdint errors):
+        - {{ cdt("mesa-libgl-devel") }}  # [linux]
+      host:
+        - libscenario
+      run:
+    test:
+      commands:
+        - test -f ${PREFIX}/lib/gsp/libLowPassTarget.so  # [unix]
+        - test -f ${PREFIX}/lib/gsp/libActuationDelay.so  # [unix]
+
+  - name: gazebo-scenario-plugins
+    script: build_gazebo-scenario-plugins.sh  # [unix]
+    build:
+      noarch: python
+      run_exports:
+        - {{ pin_subpackage("gazebo-scenario-plugins", max_pin="x.x") }}
+    requirements:
+      build:
+      host:
+        - build
+        - cmake-build-extension
+        - pip
+        - python
+      run:
+        - {{ pin_subpackage("libgazebo-scenario-plugins", max_pin="x.x") }}
+    test:
+      imports:
+        - gazebo_scenario_plugins
+      commands:
+        - pip check
+        # - pytest
+      requires:
+        - gym
+        - gym-ignition
+        - gym-ignition-models
+        - pip
+        - pytest
+        - pytest-icdiff
+        - scenariopy
+      source_files:
+        - tests
+        - setup.cfg
+
+about:
+  home: https://github.com/ami-iit/gazebo-scenario-plugins
+  summary: Plugins for the Ignition Gazebo simulator implemented with ScenarIO.
+  dev_url: https://github.com/ami-iit/gazebo-scenario-plugins
+  license: LGPL-2.1-or-later
+  license_file: LICENSE
+
+extra:
+  recipe-maintainers:
+    - diegoferigo
