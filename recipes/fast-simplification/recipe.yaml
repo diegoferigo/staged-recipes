@@ -18,15 +18,16 @@ build:
 
 requirements:
   build:
+    - ${{ stdlib('c') }}
     - ${{ compiler('c') }}
     - ${{ compiler('cxx') }}
   host:
-    - cython >= 3.0.0
+    - cython >=3.0.0
     - numpy
     - pip
     - python
-    - setuptools >= 45.0
-    - wheel >= 0.37.0
+    - setuptools >=45.0
+    - wheel >=0.37.0
   run:
     - python
 
