@@ -1,0 +1,45 @@
+ schema_version: 1
+
+context:
+  name: newton-usd-schemas
+  version: 0.1.0rc2
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  url: https://pypi.org/packages/source/${{ name[0] }}/${{ name }}/${{ name|replace("-", "_")|lower }}-${{ version }}.tar.gz
+  sha256: c97ce5e8d87fab4c20e7815a469da870a6fb102663a185fa85868fcb163ecf29
+
+build:
+  number: 0
+  noarch: python
+  script: ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+
+requirements:
+  host:
+    - python ${{ python_min }}.*
+    - pip
+    - hatchling
+  run:
+    - python >=${{ python_min }}
+    - openusd
+
+tests:
+  - python:
+      imports:
+        - newton_usd_schemas
+      pip_check: true
+      python_version: ${{ python_min }}.*
+
+about:
+  homepage: https://github.com/newton-physics/newton-usd-schemas
+  license: Apache-2.0
+  license_file: LICENSE.md
+  repository: https://github.com/newton-physics/newton-usd-schemas
+  summary: OpenUSD Schemas for Newton
+
+extra:
+  recipe-maintainers:
+    - diegoferigo
