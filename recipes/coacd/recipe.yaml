@@ -37,7 +37,6 @@ build:
           -DCMAKE_PREFIX_PATH=$PREFIX
           -DCMAKE_INSTALL_PREFIX=$PREFIX
           -DCMAKE_POLICY_DEFAULT_CMP0167=NEW
-          -DCMAKE_MODULE_PATH="$PREFIX/lib/cmake/OpenVDB"
     - if: win
       then:
         - cmake -S . -B build -GNinja
@@ -46,7 +45,6 @@ build:
           -DCMAKE_PREFIX_PATH="%LIBRARY_PREFIX%"
           -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"
           -DCMAKE_POLICY_DEFAULT_CMP0167=NEW
-          -DCMAKE_MODULE_PATH="$ENV{PREFIX}/Library/lib/cmake/OpenVDB"
     - cmake --build build --config Release
     - cmake --install build --config Release
     - if: unix
