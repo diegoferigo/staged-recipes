@@ -100,7 +100,7 @@ tests:
           - coacd --help
       - if: win
         then:
-          - coacd.exe --help
+          - python -m coacd.cli --help
       - if: match(python, "=3.12")
         then:
           - python run_tests.py
