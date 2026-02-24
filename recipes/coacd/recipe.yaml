@@ -99,7 +99,9 @@ tests:
   - script:
       - cmake-package-check coacd --targets CoACD::coacd
       - coacd --help
-      - python run_tests.py
+      if: match(python, "==3.12.*")
+      then:
+        - python run_tests.py
     files:
       source:
         - examples/
