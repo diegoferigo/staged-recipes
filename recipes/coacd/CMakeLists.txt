@@ -10,6 +10,8 @@ if(UNIX)
 elseif(WIN32)
     file(TO_CMAKE_PATH "$ENV{PREFIX}" CONDA_PREFIX_FWD)
     list(APPEND CMAKE_MODULE_PATH "${CONDA_PREFIX_FWD}/Library/lib/cmake/OpenVDB")
+    # Add /bigobj to MSVC to avoid C1128 error.
+    add_compile_options(/bigobj)
 endif()
 message(STATUS "CMAKE_MODULE_PATH=${CMAKE_MODULE_PATH}")
 
