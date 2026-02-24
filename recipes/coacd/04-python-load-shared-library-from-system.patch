@@ -1,0 +1,25 @@
+--- a/python/package/__init__.py
++++ b/python/package/__init__.py
+@@ -2,6 +2,7 @@
+ import os
+
+ import ctypes
++import ctypes.util
+ from ctypes import (
+     Structure,
+     POINTER,
+@@ -15,10 +16,10 @@
+ )
+
+
+-_lib_files = os.listdir(os.path.dirname(os.path.abspath(__file__)))
+-for _file in _lib_files:
+-    if _file.startswith("lib_coacd"):
+-        _lib = ctypes.CDLL(os.path.join(os.path.dirname(os.path.abspath(__file__)), _file))
++_lib_path = ctypes.util.find_library("coacd_c_api")
++if _lib_path is None:
++    raise ImportError("Cannot find system library 'coacd_c_api'. Ensure it is in your PATH or LD_LIBRARY_PATH.")
++_lib = ctypes.CDLL(_lib_path)
+
+
+ class CoACD_Mesh(ctypes.Structure):
