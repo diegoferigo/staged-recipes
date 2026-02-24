@@ -64,11 +64,11 @@ requirements:
     - python
     - setuptools
     - zlib >=1.2.11
-    - boost >=1.81.0
+    - libboost-python-devel >=1.81.0
     - openvdb >=8.2.0
     - tbb-devel >=2022.0.0
     - spdlog >=1.8.2
-    - openmp
+    - llvm-openmp
     - eigen >=3.4.0
   ignore_run_exports:
     from_package:
