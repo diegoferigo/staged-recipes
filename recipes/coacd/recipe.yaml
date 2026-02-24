@@ -46,7 +46,7 @@ build:
           -DCMAKE_PREFIX_PATH="%LIBRARY_PREFIX%"
           -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"
           -DCMAKE_POLICY_DEFAULT_CMP0167=NEW
-          -DCMAKE_MODULE_PATH="$ENV{PREFIX}/Library/lib/cmake/OpenVDB"
+          -DCMAKE_MODULE_PATH="%LIBRARY_PREFIX%\lib\cmake\OpenVDB"
     - cmake --build build --config Release
     - cmake --install build --config Release
     - if: unix
