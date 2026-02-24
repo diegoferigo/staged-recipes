@@ -5,6 +5,12 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
+if(UNIX)
+    list(APPEND CMAKE_MODULE_PATH "$ENV{PREFIX}/lib/cmake/OpenVDB")
+elseif(WIN32)
+    list(APPEND CMAKE_MODULE_PATH "$ENV{PREFIX}/Library/lib/cmake/OpenVDB")
+endif()
+
 find_package(spdlog REQUIRED)
 find_package(OpenVDB REQUIRED)
 find_package(OpenMP REQUIRED)
