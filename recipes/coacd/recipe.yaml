@@ -1,0 +1,114 @@
+schema_version: 1
+
+context:
+  name: coacd
+  # Note: bump the version also in the custom CMakeLists.txt.
+  version: 1.0.7
+  cdt_vendor_version: 1.4.4
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  - url: https://github.com/SarahWeiii/CoACD/archive/refs/tags/${{ version }}.zip
+    sha256: fce6ecc14dd248234111552592b2a80b16de716bc85c8c3a6346028195d5d083
+    patches:
+      - 01-add-missing-cstdint-include.patch
+      - 02-fix-spdlog-v1-compatibility-and-constexpr.patch
+      - 03-fix-missing-std-namespace-for-string.patch
+      - 04-python-load-shared-library-from-system.patch
+
+  - url: https://github.com/artem-ogre/CDT/archive/refs/tags/${{ cdt_vendor_version }}.tar.gz
+    sha256: 97e57bdd1cf8219dcc81634236a502390a20dda3599dd3414a74343b7f03427f
+    target_directory: 3rd/cdt
+
+  - path: CMakeLists.txt
+    target_directory: .
+
+build:
+  number: 0
+  script:
+    - cmake -S . -B build -GNinja
+      -DCMAKE_BUILD_TYPE=Release
+      -DBUILD_SHARED_LIBS=ON
+      -DCMAKE_PREFIX_PATH=$PREFIX
+      -DCMAKE_INSTALL_PREFIX=$PREFIX
+      -DCMAKE_POLICY_DEFAULT_CMP0167=NEW
+      -DCMAKE_MODULE_PATH="$PREFIX/lib/cmake/OpenVDB;$PREFIX/Library/lib/cmake/OpenVDB"
+    - cmake --build build --config Release
+    - cmake --install build --config Release
+    - if: unix
+      then:
+        - mkdir -p $SP_DIR/coacd
+        - cp python/package/__init__.py $SP_DIR/coacd/__init__.py
+        - cp python/package/bin/coacd $PREFIX/bin/coacd
+        - chmod +x $PREFIX/bin/coacd
+    - if: win
+      then:
+        - mkdir %SP_DIR%\coacd
+        - copy python\package\__init__.py %SP_DIR%\coacd\__init__.py
+        - copy python\package\bin\coacd %SCRIPTS%\coacd
+
+requirements:
+  build:
+    # - ${{ stdlib('c') }}
+    - ${{ compiler('c') }}
+    - ${{ compiler('cxx') }}
+    - cmake
+    - make
+    - ninja
+    - pkg-config
+  host:
+    - pip
+    - python
+    - setuptools
+    - zlib >=1.2.11
+    - boost >=1.81.0
+    - openvdb >=8.2.0
+    - tbb-devel >=2022.0.0
+    - spdlog >=1.8.2
+    - openmp
+    - eigen >=3.4.0
+  ignore_run_exports:
+    from_package:
+      - zlib
+  run:
+    - numpy
+    - python
+
+tests:
+  - python:
+      imports:
+        - coacd
+      pip_check: true
+  - package_contents:
+      bin:
+        - coacd
+  - script:
+      - cmake-package-check coacd --targets CoACD::coacd
+      - coacd --help
+      - python run_tests.py
+    files:
+      source:
+        - examples/
+        - run_tests.py
+        - coacd -i examples/Bottle.obj -o outputs/Bottle_cvx.wrl -t 0.05
+    requirements:
+      run:
+        - ${{ compiler('c') }}
+        - ${{ compiler('cxx') }}
+        - cmake-package-check
+        - python
+        - trimesh
+
+about:
+  homepage: https://colin97.github.io/CoACD
+  license: BSD-3-Clause
+  license_file: LICENSE
+  repository: https://github.com/SarahWeiii/CoACD
+  summary: Approximate Convex Decomposition for 3D Meshes with Collision-Aware Concavity and Tree Search
+
+extra:
+  recipe-maintainers:
+    - diegoferigo
