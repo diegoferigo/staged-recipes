@@ -10,7 +10,7 @@ source:
   sha256: aa05c28463b9f3c9459efce19485a9777644b5671eb10908f9ae0de880e0b2cc
   patches:
     - add-sched-include.patch
-    - fix-constructors-cpp20.patch
+    - fix-destructors-cpp20.patch
 
 build:
   number: 0
