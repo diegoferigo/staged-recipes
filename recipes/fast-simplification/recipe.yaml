@@ -36,6 +36,15 @@ tests:
       imports:
         - fast_simplification
       pip_check: true
+  - script:
+      - pytest ./tests/
+    files:
+      source:
+        - tests/
+    requirements:
+      run:
+        - pyvista
+        - pytest
 
 about:
   homepage: https://pyvista.github.io/fast-simplification
