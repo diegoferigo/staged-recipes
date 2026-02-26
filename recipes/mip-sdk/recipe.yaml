@@ -60,3 +60,7 @@ about:
   license_file: LICENSE
   repository: https://github.com/HBK-MicroStrain/mip_sdk
   summary: MicroStrain Communications Library for embedded systems
+
+extra:
+  recipe-maintainers:
+    - diegoferigo
