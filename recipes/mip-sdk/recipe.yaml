@@ -56,14 +56,14 @@ requirements:
 
 tests:
   - script:
-      - cmake-package-check mip
-      - cmake-package-check mip_extras
-      - cmake-package-check mip_metadata
-      - cmake-package-check microstrain
-      - cmake-package-check microstrain_extras
-      - cmake-package-check microstrain_recording_connection
-      - cmake-package-check microstrain_serial
-      - cmake-package-check microstrain_socket
+      - cmake-package-check mip --targets
+        mip_extras
+        mip_metadata
+      - cmake-package-check microstrain --targets
+        microstrain_extras
+        microstrain_recording_connection
+        microstrain_serial
+        microstrain_socket
     requirements:
       run:
         - ${{ compiler('c') }}
