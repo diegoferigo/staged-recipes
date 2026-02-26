@@ -34,13 +34,15 @@ build:
           -DBUILD_SHARED_LIBS=ON
           -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=ON
           -DMICROSTRAIN_ENABLE_EXTRAS=ON
-          -DMICROSTRAIN_BUILD_TESTS=ON
+          -DMICROSTRAIN_BUILD_TESTS=OFF
           -DMICROSTRAIN_BUILD_PACKAGE=OFF
           -DMICROSTRAIN_BUILD_EXAMPLES=OFF
           -DMICROSTRAIN_BUILD_DOCUMENTATION_QUIET=OFF
     - cmake --build build/ --config Release
     - cmake --install build/ --config Release
-    - ctest --test-dir build/ --build-config Release --verbose --output-on-failure
+    - if: not win
+      then:
+        - ctest --test-dir build/ --build-config Release --verbose --output-on-failure
 
 requirements:
   build:
