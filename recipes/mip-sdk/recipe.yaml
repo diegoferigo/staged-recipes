@@ -19,7 +19,6 @@ build:
         - cmake -S . -B build/
           ${CMAKE_ARGS}
           -GNinja
-          -DCMAKE_BUILD_TYPE=Release
           -DBUILD_SHARED_LIBS=ON
           -DMICROSTRAIN_ENABLE_EXTRAS=ON
           -DMICROSTRAIN_BUILD_TESTS=ON
@@ -32,10 +31,10 @@ build:
         - cmake -S . -B build/
           %CMAKE_ARGS%
           -GNinja
-          -DCMAKE_BUILD_TYPE=Release
           -DBUILD_SHARED_LIBS=ON
           -DMICROSTRAIN_ENABLE_EXTRAS=ON
           -DMICROSTRAIN_BUILD_TESTS=ON
+          -DFETCHCONTENT_FULLY_DISCONNECTED=ON
           -DMICROSTRAIN_BUILD_PACKAGE=OFF
           -DMICROSTRAIN_BUILD_EXAMPLES=OFF
           -DMICROSTRAIN_BUILD_DOCUMENTATION_QUIET=OFF
@@ -49,6 +48,9 @@ requirements:
     - ${{ compiler('c') }}
     - ${{ compiler('cxx') }}
     - cmake
+    - if: win
+      then:
+        - doctest
     - git >=1.6.5
     - ninja
   run:
