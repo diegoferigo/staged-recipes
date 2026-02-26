@@ -13,17 +13,32 @@ source:
 build:
   number: 0
   script:
-    - echo ${CMAKE_ARGS}
-    - cmake -S . -B build/
-      ${CMAKE_ARGS}
-      -GNinja
-      -DCMAKE_BUILD_TYPE=Release
-      -DBUILD_SHARED_LIBS=ON
-      -DMICROSTRAIN_ENABLE_EXTRAS=ON
-      -DMICROSTRAIN_BUILD_TESTS=ON
-      -DMICROSTRAIN_BUILD_PACKAGE=OFF
-      -DMICROSTRAIN_BUILD_EXAMPLES=OFF
-      -DMICROSTRAIN_BUILD_DOCUMENTATION_QUIET=OFF
+    - if: unix
+      then:
+        - echo ${CMAKE_ARGS}
+        - cmake -S . -B build/
+          ${CMAKE_ARGS}
+          -GNinja
+          -DCMAKE_BUILD_TYPE=Release
+          -DBUILD_SHARED_LIBS=ON
+          -DMICROSTRAIN_ENABLE_EXTRAS=ON
+          -DMICROSTRAIN_BUILD_TESTS=ON
+          -DMICROSTRAIN_BUILD_PACKAGE=OFF
+          -DMICROSTRAIN_BUILD_EXAMPLES=OFF
+          -DMICROSTRAIN_BUILD_DOCUMENTATION_QUIET=OFF
+    - if: win
+      then:
+        - echo %CMAKE_ARGS%
+        - cmake -S . -B build/
+          %CMAKE_ARGS%
+          -GNinja
+          -DCMAKE_BUILD_TYPE=Release
+          -DBUILD_SHARED_LIBS=ON
+          -DMICROSTRAIN_ENABLE_EXTRAS=ON
+          -DMICROSTRAIN_BUILD_TESTS=ON
+          -DMICROSTRAIN_BUILD_PACKAGE=OFF
+          -DMICROSTRAIN_BUILD_EXAMPLES=OFF
+          -DMICROSTRAIN_BUILD_DOCUMENTATION_QUIET=OFF
     - cmake --build build/ --config Release
     - cmake --install build/ --config Release
     - ctest --test-dir build/ --build-config Release --verbose --output-on-failure
