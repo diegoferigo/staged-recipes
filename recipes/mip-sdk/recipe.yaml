@@ -22,6 +22,7 @@ build:
           -DBUILD_SHARED_LIBS=ON
           -DMICROSTRAIN_ENABLE_EXTRAS=ON
           -DMICROSTRAIN_BUILD_TESTS=ON
+          -DDOCTEST_NO_INSTALL=ON
           -DMICROSTRAIN_BUILD_PACKAGE=OFF
           -DMICROSTRAIN_BUILD_EXAMPLES=OFF
           -DMICROSTRAIN_BUILD_DOCUMENTATION_QUIET=OFF
@@ -35,6 +36,7 @@ build:
           -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=ON
           -DMICROSTRAIN_ENABLE_EXTRAS=ON
           -DMICROSTRAIN_BUILD_TESTS=OFF
+          -DDOCTEST_NO_INSTALL=ON
           -DMICROSTRAIN_BUILD_PACKAGE=OFF
           -DMICROSTRAIN_BUILD_EXAMPLES=OFF
           -DMICROSTRAIN_BUILD_DOCUMENTATION_QUIET=OFF
@@ -50,7 +52,6 @@ requirements:
     - ${{ compiler('c') }}
     - ${{ compiler('cxx') }}
     - cmake
-    - git >=1.6.5
     - ninja
   run:
 
