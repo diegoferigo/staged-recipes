@@ -33,6 +33,9 @@ build:
           %CMAKE_ARGS%
           -GNinja
           -DBUILD_SHARED_LIBS=ON
+          -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=bin
+          -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=lib
+          -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY=lib
           -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=ON
           -DMICROSTRAIN_ENABLE_EXTRAS=ON
           -DMICROSTRAIN_BUILD_TESTS=OFF
@@ -42,9 +45,7 @@ build:
           -DMICROSTRAIN_BUILD_DOCUMENTATION_QUIET=OFF
     - cmake --build build/ --config Release
     - cmake --install build/ --config Release
-    - if: not win
-      then:
-        - ctest --test-dir build/ --build-config Release --verbose --output-on-failure
+    - ctest --test-dir build/ --build-config Release --verbose --output-on-failure
 
 requirements:
   build:
