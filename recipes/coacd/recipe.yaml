@@ -36,8 +36,6 @@ build:
         - cmake -S . -B build -GNinja
           ${CMAKE_ARGS}
           -DBUILD_SHARED_LIBS=ON
-          -DCMAKE_PREFIX_PATH=$PREFIX
-          -DCMAKE_INSTALL_PREFIX=$PREFIX
           -DCMAKE_POLICY_DEFAULT_CMP0167=NEW
     - if: win
       then:
@@ -45,8 +43,6 @@ build:
         - cmake -S . -B build -GNinja
           %CMAKE_ARGS%
           -DBUILD_SHARED_LIBS=ON
-          -DCMAKE_PREFIX_PATH="%LIBRARY_PREFIX%"
-          -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"
           -DCMAKE_POLICY_DEFAULT_CMP0167=NEW
     - cmake --build build --config Release
     - cmake --install build --config Release
