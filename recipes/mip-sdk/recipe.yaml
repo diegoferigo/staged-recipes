@@ -54,6 +54,8 @@ requirements:
     - cmake
     - ninja
   run:
+  run_exports:
+    - ${{ pin_subpackage('mip-sdk', upper_bound='x.x') }}
 
 tests:
   - script:
