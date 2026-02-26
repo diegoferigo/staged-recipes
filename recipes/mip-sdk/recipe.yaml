@@ -1,0 +1,62 @@
+context:
+  name: mip-sdk
+  version: 4.0.0
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  url: https://github.com/HBK-MicroStrain/mip_sdk/archive/refs/tags/v${{ version }}.tar.gz
+  sha256: 0ed3eb4429526c901c1c852201ad6e55453a6b112d7dd71781c3a708d5e0199c
+
+build:
+  number: 0
+  script:
+    - echo ${CMAKE_ARGS}
+    - cmake -S . -B build/
+      ${CMAKE_ARGS}
+      -GNinja
+      -DCMAKE_BUILD_TYPE=Release
+      -DBUILD_SHARED_LIBS=ON
+      -DMICROSTRAIN_ENABLE_EXTRAS=ON
+      -DMICROSTRAIN_BUILD_TESTS=ON
+      -DMICROSTRAIN_BUILD_PACKAGE=OFF
+      -DMICROSTRAIN_BUILD_EXAMPLES=OFF
+      -DMICROSTRAIN_BUILD_DOCUMENTATION_QUIET=OFF
+    - cmake --build build/ --config Release
+    - cmake --install build/ --config Release
+    - ctest --test-dir build/ --build-config Release --verbose --output-on-failure
+
+requirements:
+  build:
+    # - ${{ stdlib('c') }}
+    - ${{ compiler('c') }}
+    - ${{ compiler('cxx') }}
+    - cmake
+    - git >=1.6.5
+    - ninja
+  run:
+
+tests:
+  - script:
+      - cmake-package-check mip
+      - cmake-package-check mip_extras
+      - cmake-package-check mip_metadata
+      - cmake-package-check microstrain
+      - cmake-package-check microstrain_extras
+      - cmake-package-check microstrain_recording_connection
+      - cmake-package-check microstrain_serial
+      - cmake-package-check microstrain_socket
+    requirements:
+      run:
+        - ${{ compiler('c') }}
+        - ${{ compiler('cxx') }}
+        - cmake-package-check
+
+about:
+  homepage: https://github.com/HBK-MicroStrain/mip_sdk
+  license: MIT
+  license_file: LICENSE
+  repository: https://github.com/HBK-MicroStrain/mip_sdk
+  summary: MicroStrain Communications Library for embedded systems
