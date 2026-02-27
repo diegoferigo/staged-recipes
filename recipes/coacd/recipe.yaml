@@ -96,6 +96,8 @@ tests:
       - if: win
         then:
           - set PATH=%PREFIX%\Scripts;%PATH%
+          - dir %PREFIX%\Scripts\coacd*
+          - type %PREFIX%\Scripts\coacd.exe
       - coacd --help
       - if: match(python, "=3.12")
         then:
