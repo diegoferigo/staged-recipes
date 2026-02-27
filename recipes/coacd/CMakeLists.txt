@@ -45,9 +45,9 @@ target_link_libraries(
 # C-API wrapper
 # =============
 
-add_library(coacd_c_api SHARED "public/coacd.cpp")
+add_library(_coacd SHARED "public/coacd.cpp")
 target_link_libraries(
-    coacd_c_api
+    _coacd
     PRIVATE
     coacd
     spdlog::spdlog
@@ -60,7 +60,6 @@ target_link_libraries(
 
 # Currently unused (could be used in tests).
 add_executable(main main.cpp)
-# set_target_properties(main PROPERTIES OUTPUT_NAME coacd)
 target_link_libraries(
     main
     PRIVATE
@@ -76,11 +75,8 @@ target_link_libraries(
 include(GNUInstallDirs)
 
 install(
-    TARGETS coacd coacd_c_api
+    TARGETS coacd _coacd
     EXPORT coacdTargets
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
 install(
@@ -111,7 +107,7 @@ configure_package_config_file(
 write_basic_package_version_file(
     ${CMAKE_CURRENT_BINARY_DIR}/coacdConfigVersion.cmake
     VERSION ${PROJECT_VERSION}
-    COMPATIBILITY SameMajorVersion
+    COMPATIBILITY AnyNewerVersion
 )
 
 install(
