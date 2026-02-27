@@ -94,12 +94,7 @@ tests:
         - coacd
   - script:
       - cmake-package-check coacd --targets CoACD::coacd
-      # - if: win
-      #   then:
-      #     - '"%PREFIX%\Scripts\coacd.exe" --help'
-      #     - set PATH=%PREFIX%\Scripts;%PATH%
-      #     - dir %PREFIX%\Scripts\coacd*
-      # - coacd --help
+      - coacd -i examples/Bottle.obj -o outputs/Bottle_cvx.wrl -t 0.05
       - if: match(python, "=3.12")
         then:
           - python run_tests.py
@@ -107,7 +102,6 @@ tests:
       source:
         - examples/
         - run_tests.py
-        - coacd -i examples/Bottle.obj -o outputs/Bottle_cvx.wrl -t 0.05
     requirements:
       run:
         - ${{ compiler('c') }}
