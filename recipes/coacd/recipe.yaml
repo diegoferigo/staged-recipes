@@ -93,6 +93,9 @@ tests:
         - coacd
   - script:
       - cmake-package-check coacd --targets CoACD::coacd
+      - if: win:
+        then:
+          - set PATH=%PREFIX%\Scripts;%PATH%
       - coacd --help
       - if: match(python, "=3.12")
         then:
