@@ -118,7 +118,9 @@ tests:
 about:
   homepage: https://colin97.github.io/CoACD
   license: BSD-3-Clause
-  license_file: LICENSE
+  license_file:
+    - LICENSE
+    - 3rd/cdt/LICENSE
   repository: https://github.com/SarahWeiii/CoACD
   summary: Approximate Convex Decomposition for 3D Meshes with Collision-Aware Concavity and Tree Search
 
