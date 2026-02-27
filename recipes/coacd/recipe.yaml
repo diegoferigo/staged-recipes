@@ -93,7 +93,7 @@ tests:
         - coacd
   - script:
       - cmake-package-check coacd --targets CoACD::coacd
-      - if: win:
+      - if: win
         then:
           - set PATH=%PREFIX%\Scripts;%PATH%
       - coacd --help
