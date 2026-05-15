@@ -2,18 +2,21 @@ schema_version: 1
 
 context:
   name: isaaclab
-  version: 3.0.0.beta0
-  tag: v3.0.0-beta
+  version: 3.0.0.dev20260515
+  #version: 3.0.0.beta0
+  #tag: v3.0.0-beta
   build_number: 0
-  python_min: "3.11"
+  python_min: "3.12"
 
 recipe:
   name: ${{ name|lower }}
   version: ${{ version }}
 
 source:
-  url: https://github.com/isaac-sim/IsaacLab/archive/refs/tags/${{ tag }}.zip
-  sha256: a01a0171baeb8b41222654f4d691aea93529f4528628d59e7bdfa82e41890c4c
+  # url: https://github.com/isaac-sim/IsaacLab/archive/refs/tags/${{ tag }}.zip
+  # sha256: a01a0171baeb8b41222654f4d691aea93529f4528628d59e7bdfa82e41890c4c
+  git: https://github.com/isaac-sim/IsaacLab.git
+  rev: 88d3dda23fc4ebda04f79f0cd003da05795bb33a
 
 build:
   # noarch: python
