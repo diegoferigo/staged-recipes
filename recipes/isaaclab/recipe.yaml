@@ -108,8 +108,8 @@ outputs:
         # - ${{ pin_subpackage('isaaclab-mimic', exact=True) }}
         - ${{ pin_subpackage('isaaclab-newton', exact=True) }}
         - ${{ pin_subpackage('isaaclab-ov', exact=True) }}
-        # - ${{ pin_subpackage('isaaclab-ov-ovrtx', exact=True) }}
-        # - ${{ pin_subpackage('isaaclab-ov-physx', exact=True) }}
+        - ${{ pin_subpackage('isaaclab-ov-ovrtx', exact=True) }}
+        - ${{ pin_subpackage('isaaclab-ov-physx', exact=True) }}
         - ${{ pin_subpackage('isaaclab-physx', exact=True) }}
         - ${{ pin_subpackage('isaaclab-rl', exact=True) }}
         - ${{ pin_subpackage('isaaclab-rl-sb3', exact=True) }}
@@ -273,6 +273,11 @@ outputs:
     build:
       script:
         - cd source/isaaclab_newton
+        - sed -i '/^[[:space:]]*"isaaclab_newton\.test",/s/^\([[:space:]]*\)/\1"isaaclab_newton.sensors.imu",\'$'\n''\1/' setup.py
+        - sed -i '/^[[:space:]]*"isaaclab_newton\.test",/s/^\([[:space:]]*\)/\1"isaaclab_newton.sensors.joint_wrench",\'$'\n''\1/' setup.py
+        - sed -i '/^[[:space:]]*"isaaclab_newton\.test",/s/^\([[:space:]]*\)/\1"isaaclab_newton.sim",\'$'\n''\1/' setup.py
+        - sed -i '/^[[:space:]]*"isaaclab_newton\.test",/s/^\([[:space:]]*\)/\1"isaaclab_newton.sim.schemas",\'$'\n''\1/' setup.py
+        - sed -i '/^[[:space:]]*"isaaclab_newton\.test",/s/^\([[:space:]]*\)/\1"isaaclab_newton.sim.views",\'$'\n''\1/' setup.py
         - sed -i.bak 's|EXT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))|EXT_DIR = f"{os.environ['\''CONDA_PREFIX'\'']}/share/isaaclab-newton/config"|' ./isaaclab_newton/__init__.py
         - ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
         - mkdir -p ${PREFIX}/share/isaaclab-newton
@@ -288,7 +293,7 @@ outputs:
         - python >=${{ python_min }}
         - prettytable >=3.3.0
         - pyopengl-accelerate >=3.1.10
-        - newton >=1.2.0
+        - newton-sim >=1.2.0
         - toml # missing in setup.py
     tests:
       - python:
@@ -319,20 +324,43 @@ outputs:
           imports: isaaclab_ov
           pip_check: false
           python_version: ${{ python_min }}.*
-  # - package:
-  #     name: isaaclab-ov-ovrtx
-  #   requirements:
-  #     run:
-  #       - ${{ pin_subpackage('isaaclab-ov', exact=True) }}
-  #       - python >=${{ python_min }}
-  #       - ovrtx >=0.2.0,<0.3.0  # missing in conda-forge
-  # - package:
-  #     name: isaaclab-ov-physx
-  #   requirements:
-  #     run:
-  #       - ${{ pin_subpackage('isaaclab-ov', exact=True) }}
-  #       - python >=${{ python_min }}
-  #       - ovphysx  # missing in conda-forge
+  - package:
+      name: isaaclab-ov-ovrtx
+    requirements:
+      run:
+        - ${{ pin_subpackage('isaaclab-ov', exact=True) }}
+        - python >=${{ python_min }}
+        # - ovrtx >=0.2.0,<0.3.0 # missing in conda-forge (expected from PyPI)
+  # =================
+  # isaaclab-ov-physx
+  # =================
+  # TODO
+  # * This package expects 'ovphysx' installed from PyPI.
+  - package:
+      name: isaaclab-ov-physx
+    build:
+      script:
+        - cd source/isaaclab_ovphysx
+        - sed -i.bak 's|EXT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))|EXT_DIR = f"{os.environ['\''CONDA_PREFIX'\'']}/share/isaaclab-ovphysx"|' ./isaaclab_ovphysx/__init__.py
+        - ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+        - mkdir -p ${PREFIX}/share/isaaclab-ovphysx
+        - cp -r ./config ${PREFIX}/share/isaaclab-ovphysx/config
+    requirements:
+      host:
+        - pip
+        - python ${{ python_min }}.*
+        - setuptools
+        - toml
+      run:
+        - ${{ pin_subpackage('isaaclab', exact=True) }}
+        - python >=${{ python_min }}
+        # - ovphysx # missing in conda-forge
+        - toml # missing in setup.py
+    tests:
+      - python:
+          imports: isaaclab_ovphysx
+          pip_check: false
+          python_version: ${{ python_min }}.*
   # ==============
   # isaaclab-physx
   # ==============
@@ -465,6 +493,7 @@ outputs:
       run:
         - ${{ pin_subpackage('isaaclab', exact=True) }}
         - ${{ pin_subpackage('isaaclab-assets', exact=True) }}
+        - ${{ pin_subpackage('isaaclab-ov-physx', exact=True) }}
         - ${{ pin_subpackage('isaaclab-physx', exact=True) }}
         - python >=${{ python_min }}
         - numpy >=2
@@ -565,7 +594,7 @@ outputs:
       run:
         - ${{ pin_subpackage('isaaclab-visualizers', exact=True) }}
         - python >=${{ python_min }}
-        - newton >=1.2.0
+        - newton-sim >=1.2.0
         - pyopengl-accelerate
         - imgui-bundle >=1.92.5
     tests:
@@ -579,7 +608,7 @@ outputs:
       run:
         - ${{ pin_subpackage('isaaclab-visualizers', exact=True) }}
         - python >=${{ python_min }}
-        - newton >=1.2.0
+        - newton-sim >=1.2.0
         - rerun-sdk >=0.29.0
     tests:
       - python:
@@ -592,7 +621,7 @@ outputs:
       run:
         - ${{ pin_subpackage('isaaclab-visualizers', exact=True) }}
         - python >=${{ python_min }}
-        - newton >=1.2.0
+        - newton-sim >=1.2.0
         - viser >=1.0.16
     tests:
       - python:
