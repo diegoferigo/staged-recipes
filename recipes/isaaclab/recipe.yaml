@@ -16,8 +16,11 @@ source:
   sha256: a01a0171baeb8b41222654f4d691aea93529f4528628d59e7bdfa82e41890c4c
 
 build:
-  noarch: python
+  # noarch: python
   number: ${{ build_number }}
+  skip:
+    - osx
+    - win
 
 outputs:
   # ========
